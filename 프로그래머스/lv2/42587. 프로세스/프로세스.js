@@ -1,18 +1,15 @@
-
 function solution(priorities, location) {
-    var list = priorities.map((t,i)=>({
-        my : i === location,
-        val : t
-    }));
-    var count = 0;        
-    while(true){
-        var cur = list.splice(0,1)[0];        
-        if(list.some(t=> t.val > cur.val )){
-            list.push(cur);                        
+    const q=[];
+    priorities.forEach((i,idx)=>q.push({idx:idx, priority:i}))
+    let count=1;
+    priorities.sort((a,b)=>a-b)
+    while(q.length){
+        let first=priorities.pop();
+        while(first!== q[0].priority){
+            q.push(q.shift());
         }
-        else{            
-            count++;
-            if(cur.my) return count;
-        }
+        let a=q.shift()
+        if(a.idx===location)return count;
+        else count++;
     }
 }
