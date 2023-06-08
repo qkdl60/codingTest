@@ -1,14 +1,23 @@
 function solution(number, k) {
-   let answer=[];
-    for(let i =0; i<number.length; i++){
-        let a= number[i];
-        
-        while(k>0 && answer[answer.length-1] <a){
-            answer.pop();
-            k--;
+    let num =number.split("");
+    let answer=[];
+    //제거 기준은 뒤에 있는 값보다 앞에있는 값이 작다면 제거대상, 제거시 그 앞에 인덱스도 다시 확인, 
+    // 종료 기준은 k==0이 될때, 
+    
+    for(let i =0; i<num.length; i++){
+        if(answer.length>0){
+            if(k>0 && answer[answer.length-1]<num[i]){
+                answer.pop();
+                k--;
+                i--;
+            }else{
+                answer.push(num[i]);
+            }
+        }else{
+            answer.push(num[i])
         }
-        answer.push(a);
+ 
     }
-    answer= answer.slice(0, answer.length-k)
-    return answer.join("")
+    return k===0 ? answer.join(""): answer.slice(0,-k).join("");
+    
 }
