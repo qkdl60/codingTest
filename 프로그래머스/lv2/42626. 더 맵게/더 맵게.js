@@ -1,94 +1,190 @@
-class MinHeap {
-    constructor() {
-        this.heap = [ null ];
-    }
-    
-    size() {
-        return this.heap.length - 1;
-    }
-    
-    getMin() {
-        return this.heap[1] ? this.heap[1] : null;
-    }
-    
-    swap(a, b) {
-        [ this.heap[a], this.heap[b] ] = [ this.heap[b], this.heap[a] ];
-    }
-    
-    heappush(value) {
-        this.heap.push(value);
-        let curIdx = this.heap.length - 1;
-        let parIdx = (curIdx / 2) >> 0;
-        
-        while(curIdx > 1 && this.heap[parIdx] > this.heap[curIdx]) {
-            this.swap(parIdx, curIdx)
-            curIdx = parIdx;
-            parIdx = (curIdx / 2) >> 0;
-        }
-    }
-    
-    heappop() {
-        const min = this.heap[1];	
-        if(this.heap.length <= 2) this.heap = [ null ];
-        else this.heap[1] = this.heap.pop();   
-        
-        let curIdx = 1;
-        let leftIdx = curIdx * 2;
-        let rightIdx = curIdx * 2 + 1; 
-        
-        if(!this.heap[leftIdx]) return min;
-        if(!this.heap[rightIdx]) {
-            if(this.heap[leftIdx] < this.heap[curIdx]) {
-                this.swap(leftIdx, curIdx);
-            }
-            return min;
-        }
-
-        while(this.heap[leftIdx] < this.heap[curIdx] || this.heap[rightIdx] < this.heap[curIdx]) {
-            const minIdx = this.heap[leftIdx] > this.heap[rightIdx] ? rightIdx : leftIdx;
-            this.swap(minIdx, curIdx);
-            curIdx = minIdx;
-            leftIdx = curIdx * 2;
-            rightIdx = curIdx * 2 + 1;
-        }
-
-        return min;
-    }
-}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
 function solution(scoville, K) {
-    /*
-        스코빌 지수가 가장 낮은 두 개의 음식을 섞어 새로운 음식을 만든다 
-        섞은 음식의 스코빌 지수= 가장 맵지 않은 음식의 스코빌지수 +( 두번째로 맵지 않은 스코빌 지수*2)
-        
-        모든 음식의 스코빌 지수가 K 이상이면 stop
-        
-        섞어야 하는 최소 횟수 
-        
-        없다면 0, 만들 수 없다면 -1 
-        최대길이 백만으로 -1이 나올경우 
-        밑에 두개 조합, 정렬 , 조합 정렬
-        마지막이 k 이상일때 까지, 길이가 1이될때까지 
-        최대길이 백만으로 순회로 끝내거나 이분탐색
-        제일 작은 것, 두번째로 작은 것을 뽑는다 조합 
-        k보다 큰 것은 필요 없다, 필요하더라도 k보다 큰 값은 하나만 
-        
-        최소힙 만들기 
-    */
-    
-    const heap=new MinHeap();
-    scoville.forEach(s=>{
-        heap.heappush(s);
-    })
-    let count =0;
-    while(heap.size()>1 && heap.getMin()<K){
-        const a=heap.heappop()
-        const b=heap.heappop();
-        const c=a+(b*2);
-        heap.heappush(c)
-   
-        //sort를 빼거나 다른 방법으로 순회, sort를 빼주면 위치를 어떻게 잡아주지?, 시간복잡도를 1로 
-        count++;
+    scoville.sort((a,b)=> b - a) 
+    let cnt = 0 ;
+    let under_K = []
+    let flag = 0 // 다 합쳐서 K보다 큰지 안큰지 판별 0이면 안큰거 1이면 큰거
+
+    for(let i = 0 ; i < scoville.length ; ++i){
+        if(scoville[i] < K){
+            under_K.push(scoville[i])
+        }
+        else{
+            flag = 1
+        }
+    }    
+   // console.log(under_K)
+    let mixed = []
+    let m_i = 0
+    let i = 0
+    let n1 = 0 
+    let n2 = 0
+    while(1){
+       // console.log(mixed, n1 , n2)
+        if(mixed[m_i] != undefined ){
+            if(under_K.length != 0){
+                if(under_K.at(-1) < mixed[m_i]){
+                    n1 = under_K.pop()
+                }
+                else{
+                    n1 = mixed[m_i]
+                    ++m_i
+                }
+            }
+            else{
+                n1 = mixed[m_i]
+                ++m_i
+            }
+        }
+        else{
+            if(under_K.length != 0){
+                n1 = under_K.pop()
+            }
+            else{
+                break;
+            }
+        }
+        if(mixed[m_i] != undefined ){
+            if(under_K.length != 0){
+                if(under_K.at(-1) < mixed[m_i]){
+                    n2 = under_K.pop()
+                }
+                else{
+                    n2 = mixed[m_i]
+                    ++m_i
+                }
+            }
+            else{
+                n2 = mixed[m_i]
+                ++m_i
+            }
+        }
+        else{
+            if(under_K.length != 0){
+                n2 = under_K.pop()
+            }
+            else{
+                ++cnt
+                break;
+            }
+        }
+
+        if(n1+n2*2 < K){
+            mixed.push(n1+n2*2)
+        }
+        else{
+            flag = 1 
+        }
+       ++cnt
     }
-    
-    return heap.getMin()<K ?-1: count;
+    //if(mixed != [])
+    /*
+    가진 음식 스코빌을 하나씩 지우고 
+    새로운 음식 스코빌을 하나씩 추가해서 arr에 K보다 작으면 저장하기
+    두개의 배열을 다르게 유지해서 
+    가진읍식과 새로운 음식중 작은 것들 부터 먼저 n1,n2로 만든다
+    가진음식, 새로운 음식의 index가 합쳐서 1이라면 return 하기 그리고  flag ==1 이라면 ++cnt 해주고 끝내기 flag == 0 이라면 -1로 끝내기 
+    */
+    if(flag == 1){
+        return cnt 
+    }
+    else{
+
+        return -1
+    }
 }
