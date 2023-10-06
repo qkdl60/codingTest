@@ -13,9 +13,7 @@ function solution(prices) {
         for(let j =i+1; j<prices.length; j++){
             const compare=prices[j];
             count++;
-            if(price>compare)break
-           
-            
+            if(price>compare)break;
         }
         answer.push(count)
         
