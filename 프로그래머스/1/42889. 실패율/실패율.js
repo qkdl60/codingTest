@@ -26,6 +26,7 @@ const failRate=stage.map(i=>{
     return {st, rate: total===0? 0: current/total}
 })
 failRate.pop();
+    // sort 기준 
 const maped= failRate.sort((a,b)=>{
     if(b.rate===a.rate)return a.st-b.st;
     else return b.rate-a.rate;
