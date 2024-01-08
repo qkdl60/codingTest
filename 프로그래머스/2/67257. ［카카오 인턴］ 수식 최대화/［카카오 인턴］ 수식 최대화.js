@@ -26,7 +26,7 @@ function calc(t1,t2, oper){
             return Number(t1)*Number(t2);
     }
 }
-//expression을 탐색하면서 원하는 o
+//expression을 탐색하면서 원하는 숫자와 연산자를 분리해서 반환해준다.
 function separate(expression){
     const numbers=[];
     const operations=[];
@@ -52,7 +52,7 @@ function solution(expression) {
    //숫자와 연산자 분리 
    const [numbers, operations]=separate(expression);
     // 우선순위 에따라서 계산 , 
-    // 해당 연산자 인덱스가 0이라면, 0과1 계산 후 0에 넣어주고 1은 빼준다. 해당 oper 도 빼준다.
+   
     let max=0;
     p.forEach(i=>{
         //i는 우선순위별로 연산자가 담긴 배열
@@ -62,6 +62,7 @@ function solution(expression) {
         
         i.forEach(j=>{
             //j는 현재 우선 순위 이다. 0
+             // 해당 연산자 인덱스가 0이라면, 0과1 계산 후 0에 넣어주고 1은 빼준다. 해당 oper 도 빼준다.
             for(let k =0 ; k<oper.length; k++){
                 if(oper[k]===j){
                     const calced=calc(nums[k], nums[k+1],oper[k]);
