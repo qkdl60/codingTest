@@ -63,6 +63,8 @@ function solution(expression) {
         i.forEach(j=>{
             //j는 현재 우선 순위 이다. 0
              // 해당 연산자 인덱스가 0이라면, 0과1 계산 후 0에 넣어주고 1은 빼준다. 해당 oper 도 빼준다.
+            
+            //while(oper.includes(j)){} 이런식의 계산 진행도 가능 이게 더 좋은 방법인것 같다. 
             for(let k =0 ; k<oper.length; k++){
                 if(oper[k]===j){
                     const calced=calc(nums[k], nums[k+1],oper[k]);
