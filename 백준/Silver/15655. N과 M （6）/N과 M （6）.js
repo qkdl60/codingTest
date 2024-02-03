@@ -6,8 +6,6 @@ const list=l.split(' ').map(Number).sort((a,b)=>a-b);
 
 const result = getP(list, 0);
 console.log(result.map(i=>i.join(' ')).join('\n') )
-
-
 function getP(list ,current){
     if(current===m-1)return list.map(i=>[i]);
     const result=[];
