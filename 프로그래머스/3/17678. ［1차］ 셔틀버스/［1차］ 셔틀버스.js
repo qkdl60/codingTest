@@ -29,8 +29,7 @@ function solution(n, t, m, timetable) {
     }).filter(i=>i<=lastBus).sort((a,b)=>b-a);
  
 
-    // 마지막 셔틀을 타고 싶다 .
-    // 셔틀에 태우고 자리가 있다면 셔틀 시간에 맞춰서, 없다면 마지막 탑승 인원 -1 
+ 
     const bus=Array.from({length:n}, ()=>[]);
     busTable.forEach((b, index )=>{
         for(let i =0; i<m; i++){
