@@ -22,49 +22,28 @@ n번으로
 투포인터?
 */
 function solution(a) {
-//     let left=0;
-//     let right=a.length-1;
-//     let leftMin=a[left];
-//     let rightMin=a[right];
-//     let count=1; 
+    let left=0;
+    let right=a.length-1;
+    let leftMin=a[left];
+    let rightMin=a[right];
+    let count=1; 
     
-//     while(left<right){
-//         if(a[left] <a[right]){
-//             const middle=a[right-1];
-//             if(middle<rightMin){
-//                 count++;
-//                 rightMin=middle;
-//             }
-//             right--;
-//         }else{
-//             const middle=a[left+1];
-//             if(middle<leftMin){
-//                 count++;
-//                 leftMin=middle
-//             }
-//             left++;
-//         }
-//     }
-//     return count
-    let front=a[0];
-    let back=a[a.length-1];
-    let frontArr=[];
-    let backArr=[];
-    
-    for(let i =1; i< a.length-1; i++){
-        let current=a[i];
-        if( current<front){
-            front=current;
-            frontArr.push(current);
+    while(left<right){
+        if(a[left] <a[right]){
+            const middle=a[right-1];
+            if(middle<rightMin){
+                count++;
+                rightMin=middle;
+            }
+            right--;
+        }else{
+            const middle=a[left+1];
+            if(middle<leftMin){
+                count++;
+                leftMin=middle
+            }
+            left++;
         }
     }
-    for(let i= 1; i<a.length-1; i++){
-        let current= a[a.length-1-i];
-        if(current <back){
-            back=current;
-            backArr.push(current);
-        }
-    }
-    
-    return new Set([...frontArr, ...backArr]).size+2
+    return count
 }
