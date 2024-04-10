@@ -33,7 +33,7 @@ function solution(scores) {
         if(a.score[0]!==b.score[0])return b.score[0]-a.score[0];
         else return a.score[1]- b.score[1]; // 같은 경우를 위해서 
     }).filter((i, index, origin)=>{
-        
+        //내 앞에서 가낭 큰 값보다 작다면  두 점수 모두 낮은것이다. 
         if(maxScore>i.score[1])return false;
         maxScore=Math.max(maxScore, i.score[1]);
         return true;
