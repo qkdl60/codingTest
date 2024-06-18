@@ -22,23 +22,30 @@ console.log(count)
 
 
 
-
+/*
+'.'이 아닌것을 순서대로 모으고, 해당 위치에 '.'을 넣어준다.
+그리고 밑에서 부터 모아온 뿌요로 바꿔준다. 
+*/
 function arrangeField(map){
  
     for(let i =0 ; i<ROW_LENGTH; i++){
         let replace=''
         for(let j=0; j<COLUMN_LENGTH;j++){
             const a=map[j][i];
-            if(a!=='.')replace+=a;
+            if(a!=='.'){
+                replace+=a;
+                map[j][i]='.';
+                
+            }
+            
         }
-        replace=replace.padStart(12,'.')
-        for(let j=0; j<COLUMN_LENGTH; j++){
-            map[j][i]=replace[j]
+        replace=replace.split('')
+        let index=11;
+        while(replace.length){
+            map[index][i]=replace.pop();
+            index--;
         }
     }
-    
-    
-    
 };
 
 
