@@ -2,36 +2,37 @@
 필드 검사 타겟들 파쇄
 재배열 
 위 반복
+
+
+맵에서 삭제
 */
 const fs =require('fs');
 const filePath=process.platform==='linux'?'/dev/stdin':'./input.txt';
 let m=fs.readFileSync(filePath).toString().trim().split('\n').map(i=>i.split(''));
-
+const COLUMN_LENGTH=12;
+const ROW_LENGTH=6;
 let count=0;
 while(true){
     const [map,removedCount]=removePuyo(m);
     if(removedCount===0)break;
     count++;
-    arrangeField(map)
+    arrangeField(map);
 }
 console.log(count)
 
 
 
 
-
-
 function arrangeField(map){
-    const rowLength=map[0].length;
-    const columnLength=map.length;
-    for(let i =0 ; i<rowLength; i++){
-        const replace=[];
-        for(let j=0; j<columnLength;j++){
+ 
+    for(let i =0 ; i<ROW_LENGTH; i++){
+        let replace=''
+        for(let j=0; j<COLUMN_LENGTH;j++){
             const a=map[j][i];
-            if(a==='.')replace.unshift('.');
-            else replace.push(a);
+            if(a!=='.')replace+=a;
         }
-        for(let j=0; j<columnLength; j++){
+        replace=replace.padStart(12,'.')
+        for(let j=0; j<COLUMN_LENGTH; j++){
             map[j][i]=replace[j]
         }
     }
@@ -43,15 +44,13 @@ function arrangeField(map){
 
 function removePuyo(map){
   const directions=[[1,0], [-1, 0], [0,1], [0,-1]];
-  const h=map.length;
-  const w=map[0].length;
-  const visited=Array.from({length:h}, ()=>Array.from({length:w}, ()=>false));  
+  const visited=Array.from({length:COLUMN_LENGTH}, ()=>Array.from({length:ROW_LENGTH}, ()=>false));  
     //재방문 막기 
     //지워져야되는 좌표 저장
   const target=[];
     //bfs로 진행
-  for(let i=0; i<h; i++){
-      for(let j = 0; j<w; j++){
+  for(let i=0; i<COLUMN_LENGTH; i++){
+      for(let j = 0; j<ROW_LENGTH; j++){
           const a=map[i][j];
           if(a!=='.' && !visited[i][j]){
             //temp가 4개 이상이면 파괴한다
@@ -63,7 +62,7 @@ function removePuyo(map){
                 for(let[cx,cy] of q){
                     for(let [dx,dy] of directions){
                         const [nx, ny]=[dx+cx,dy+cy];
-                        if(nx>=0 && nx<h&& ny>=0 && ny<w && map[nx][ny]===a && !visited[nx][ny]){
+                        if(nx>=0 && nx<COLUMN_LENGTH&& ny>=0 && ny<ROW_LENGTH && map[nx][ny]===a && !visited[nx][ny]){
                             visited[nx][ny]=true;
                             replace.push([nx,ny]);
                             temp.push([nx,ny]);
