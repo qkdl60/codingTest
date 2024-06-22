@@ -20,18 +20,18 @@ const endMin=getTimePerMin(endTime);
 const streamMin=getTimePerMin(streamEndTime);
 
 const beforeStart=new Set;
-const afterEnd=new Set;
+const part=new Set();
+let count=0;
 for(let a of S){
     const [tStr, name]=a.split(' ');
     const time=getTimePerMin(tStr);
     if(time<=startMin)beforeStart.add(name);
-    if(time>=endMin && time<=streamMin)afterEnd.add(name);
+    if(time>=endMin && time<=streamMin){
+        if(beforeStart.has(name))part.add(name);
+    }
 }
-let count=0;
-for(let a of beforeStart){
-    if(afterEnd.has(a))count++;
-}
-console.log(count)
+
+console.log(part.size)
 
 
 
