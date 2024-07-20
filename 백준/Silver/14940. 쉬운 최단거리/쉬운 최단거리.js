@@ -12,15 +12,19 @@ for(let i =0; i<n; i++){
         const t= map[i][j];
         if( t===2){
             startPosition=[i,j]
-            flag= true;
-            break;
+            visited[0];
+            continue;
         }
+        if(t===1){
+            visited[i][j]=-1;
+        }
+        
     }
     if(flag)break;
 }
 
 const [sx,sy]=startPosition;
-visited[sx][sy]=1;
+visited[sx][sy]=0;
 let queue=[startPosition]
 let count=0;
 while(queue.length){
@@ -29,7 +33,7 @@ while(queue.length){
     for(let [cx,cy] of queue){
         for(let [dx,dy] of d){
             const[nx,ny]=[cx+dx, cy+dy];
-            if(nx>=0 && nx<n && ny>=0 && ny<m && map[nx][ny]===1 && visited[nx][ny]===0){
+            if(nx>=0 && nx<n && ny>=0 && ny<m && map[nx][ny]===1 && visited[nx][ny]===-1){
                 visited[nx][ny]=count;
                 replace.push([nx,ny])
             }
@@ -37,14 +41,8 @@ while(queue.length){
     }
     queue=replace;
 }
-visited[sx][sy]=0;
-for(let i=0; i<n; i++){
-    for(let j=0; j<m; j++){
-        if(map[i][j]===1 && visited[i][j]===0){
-            visited[i][j]=-1;
-        }
-    }
-}
+
+
 console.log(visited.map(i=>i.join(' ')).join('\n'))
 
 
