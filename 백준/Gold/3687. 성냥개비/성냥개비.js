@@ -37,51 +37,14 @@ const [n, ...list] = fs.readFileSync(filePath).toString().trim().split("\n").map
 15   ->    108, 007 (2,13, 108),(3,12,287),(4,11,264),(5,10,222),(6,9,186),(7,8,168),()
 */
 const nMax = Math.max(...list);
-const minDp = [
-  null,
-  null,
-  ["1", "1"],
-  ["7", "7"],
-  ["4", "4"],
-  ["2", "2"],
-  ["6", "0"],
-  ["8", "8"],
-  ["10", "01"],
-  ["18", "07"],
-  ["22", "04"],
-  ["20", "02"],
-];
+const dp = [null, null, "1", "7", "4", "2", "6", "8"];
 
-for (let i = 11; i <= nMax; i++) {
-  let left = 2;
-  let right = i - 2;
-  //for 2번
-
-  minDp[i] = [String(Number.MAX_VALUE), String(Number.MAX_VALUE)];
-
-  while (left <= right) {
-    const c1 = minDp[left][0] + minDp[right][0];
-    const c2 = minDp[right][0] + minDp[left][0];
-    const c3 = minDp[left][1] + minDp[right][1];
-    const c4 = minDp[right][1] + minDp[left][1];
-
-    const c5 = minDp[right][1] + minDp[left][0];
-    const c6 = minDp[right][0] + minDp[left][1];
-
-    const c7 = minDp[left][1] + minDp[right][0];
-    const c8 = minDp[left][0] + minDp[right][1];
-
-    const ar = [c1, c2, c3, c4, c5, c6, c7, c8];
-
-    const filtered = ar.filter((i) => !i.startsWith("0"));
-    const min = ar.reduce((acc, cur) => {
-      if (acc === null) return cur;
-      return acc < cur ? acc : cur;
-    }, null);
-
-    minDp[i] = [String(Math.min(minDp[i][0], ...filtered)), min];
-    left++;
-    right--;
+for (let i = 8; i <= nMax; i++) {
+  dp[i] = Number.MAX_SAFE_INTEGER.toString();
+  for (let j = 2; j <= i - 2; j++) {
+    const a = dp[j];
+    const b = i - j === 6 ? "0" : dp[i - j];
+    dp[i] = Math.min(Number(a + b), Number(dp[i])).toString();
   }
 }
 const answer = [];
@@ -90,7 +53,7 @@ list.forEach((n) => {
   const b = n % 2;
   let max = "1".repeat(a);
   max = b ? "7" + max.slice(1) : max;
-  const min = minDp[n][0];
+  const min = dp[n];
   answer.push([min, max].join(" "));
 });
 console.log(answer.join("\n"));
