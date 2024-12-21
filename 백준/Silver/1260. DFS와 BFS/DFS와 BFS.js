@@ -1,54 +1,61 @@
-
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-let [N, ...l] = fs.readFileSync(filePath).toString().trim().split("\n");
-const [n,m,v]=N.split(" ").map(Number)
-let g=Array.from({length:n+1}, ()=>[]);
-for(let a of l){
-    const [f,t]=a.split(" ").map(Number);
-    g[f].push(t);
-    g[t].push(f);
-}
-g.forEach(v=>v.sort((a,b)=>a-b));
+const [[n, m, c], ...list] = fs
+  .readFileSync(filePath)
+  .toString()
+  .trim()
+  .split("\n")
+  .map((l) => l.split(" ").map(Number));
 
-const visited=Array.from({length:n+1}, ()=>0);
-function initVisited(){
-    visited.fill(0);
-}
+/*
+https://www.acmicpc.net/problem/1260
 
-const answer1=[]
-function DFS(s){
-    visited[s]=1;
-     answer1.push(s);
-    for(let a of g[s] ){
-        if(visited[a]===0){
-           
-            DFS(a);
-        }
+*/
+
+let g = Array.from({length: n + 1}, () => []);
+
+for (const [f, t] of list) {
+  g[f].push(t);
+  g[t].push(f);
+}
+g = g.map((l) => l.sort((a, b) => a - b));
+
+
+const visited = Array.from({length: n + 1}, () => false);
+visited[c] = true;
+const dList = [c];
+DFS(c, [...visited], dList);
+
+const bList = [c];
+BFS(c, [...visited], bList);
+
+console.log([dList, bList].map((arr) => arr.join(" ")).join("\n"));
+
+function DFS(t, visited, ar) {
+  const l = g[t];
+  for (const a of l) {
+    if (!visited[a]) {
+      visited[a] = true;
+      ar.push(a);
+      DFS(a, visited, ar);
     }
+  }
 }
 
-const answer2=[];
-function BFS(s){
-    // BFS는 재귀를 사용하지 않는다. 
-    visited[s]=1;
-    let preAr=[s];
-    while(preAr.length){
-        const nextAr=[];
-        for(let a of preAr){
-            answer2.push(a)
-            for(let b of g[a]){
-                if(visited[b]===0){
-                    visited[b]=1;
-                     nextAr.push(b)
-                }
-            }
+function BFS(t, visited, ar) {
+  let q = [t];
+  while (q.length) {
+    const replace = [];
+    for (const a of q) {
+      const l = g[a];
+      for (let b of l) {
+        if (!visited[b]) {
+          visited[b] = true;
+          replace.push(b);
+          ar.push(b);
         }
-        preAr=nextAr;
-        
+      }
     }
+    q = replace;
+  }
 }
-DFS(v)
-initVisited();
-BFS(v);
-console.log(answer1.join(' ')+'\n'+answer2.join(' '))
