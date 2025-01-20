@@ -25,9 +25,10 @@ if (k === 0) {
   const answer = getRouteCount(start, end, dp);
   console.log(answer);
 } else {
-  const x = Math.floor(k / m);
-  const y = k % m;
-  const e1 = y === 0 ? [x - 1, k - 1] : [x, y - 1];
+  const x = Math.floor((k - 1) / m);
+  const y = (k - 1) % m;
+  const e1 = [x, y];
+
   getRouteCount(start, e1, dp);
   const answer = getRouteCount(e1, end, dp);
   console.log(answer);
