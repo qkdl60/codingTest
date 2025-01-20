@@ -17,42 +17,36 @@ o표시가 있다면
 
 
 */
-const end = [n - 1, m - 1];
+const dp = Array.from({length: n}, () => Array.from({length: m}, () => 0));
+dp[0][0] = 1;
 const start = [0, 0];
+const end = [n - 1, m - 1];
 if (k === 0) {
-  const count = getRouteCount(start, end);
-  console.log(count);
+  const answer = getRouteCount(start, end, dp);
+  console.log(answer);
 } else {
   const x = Math.floor(k / m);
   const y = k % m;
-  const e1 = [x, y === 0 ? k - 1 : y - 1];
-  const c1 = getRouteCount(start, e1);
-  const c2 = getRouteCount(e1, end);
-
-  console.log(c1 * c2);
+  const e1 = y === 0 ? [x - 1, k - 1] : [x, y - 1];
+  getRouteCount(start, e1, dp);
+  const answer = getRouteCount(e1, end, dp);
+  console.log(answer);
 }
 
-function getRouteCount(start, end) {
-  let count = 0;
-  let q = [start];
+function getRouteCount(start, end, dp) {
   const [sx, sy] = start;
   const [ex, ey] = end;
-  while (q.length) {
-    const replace = [];
-    for (let [cx, cy] of q) {
-      if (cx === ex && cy === ey) {
-        count++;
-        continue;
-      }
-      for (const [dx, dy] of d) {
-        const [nx, ny] = [dx + cx, dy + cy];
-        if (nx <= ex && ny <= ey) {
-          replace.push([nx, ny]);
-        }
-      }
+  for (let i = sx; i <= ex; i++) {
+    dp[i][sy] = dp[sx][sy];
+  }
+  for (let i = sy; i <= ey; i++) {
+    dp[sx][i] = dp[sx][sy];
+  }
+  for (let i = sx + 1; i <= ex; i++) {
+    for (let j = sy + 1; j <= ey; j++) {
+      dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
     }
-    q = replace;
   }
 
-  return count;
+  return dp[ex][ey];
 }
